@@ -6,7 +6,7 @@ import (
 	"net/url"
 )
 
-func (api *RestApiClient) AccountBalance() ([]AccountBalance, error) {
+func (api *RestApiClient) ListAccountBalance() ([]AccountBalance, error) {
 	resp, err := api.queryPrivate("GET", "/balance", url.Values{})
 	if err != nil {
 		return nil, err
@@ -19,8 +19,8 @@ func (api *RestApiClient) AccountBalance() ([]AccountBalance, error) {
 	return jsonData, nil
 }
 
-func (api *RestApiClient) GetBalance(asset string) (*AccountBalance, error) {
-	res, err := api.AccountBalance()
+func (api *RestApiClient) GetAccountBalance(asset string) (*AccountBalance, error) {
+	res, err := api.ListAccountBalance()
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (api *RestApiClient) GetBalance(asset string) (*AccountBalance, error) {
 	return nil, fmt.Errorf("Not found asset %s", asset)
 }
 
-func (api *RestApiClient) AccountInformation() (*AccountInformation, error) {
+func (api *RestApiClient) GetAccountInformation() (*AccountInformation, error) {
 	resp, err := api.queryPrivate("GET", "/account", url.Values{})
 	if err != nil {
 		return nil, err
