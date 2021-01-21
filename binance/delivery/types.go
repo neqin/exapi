@@ -108,3 +108,42 @@ type AccountBalance struct {
 	AvailableBalance     float64 `json:",string"`
 	UpdateTime           int64
 }
+
+type Asset struct {
+	Asset                  string
+	WalletBalance          float64 `json:",string"`
+	UnrealizedProfit       float64 `json:",string"`
+	MarginBalance          float64 `json:",string"`
+	MaintMargin            float64 `json:",string"`
+	InitialMargin          float64 `json:",string"`
+	PositionInitialMargin  float64 `json:",string"`
+	OpenOrderInitialMargin float64 `json:",string"`
+	MaxWithdrawAmount      float64 `json:",string"`
+	CrossWalletBalance     float64 `json:",string"`
+	CrossUnPnl             float64 `json:",string"`
+	AvailableBalance       float64 `json:",string"`
+}
+
+type Position struct {
+	Symbol                 string
+	InitialMargin          float64 `json:",string"`
+	MaintMargin            float64 `json:",string"`
+	UnrealizedProfit       float64 `json:",string"`
+	PositionInitialMargin  float64 `json:",string"`
+	OpenOrderInitialMargin float64 `json:",string"`
+	Leverage               float64 `json:",string"`
+	Isolated               bool
+	PositionSide           PositionSideType
+	EntryPrice             float64 `json:",string"`
+	MaxQty                 float64 `json:",string"`
+}
+
+type AccountInformation struct {
+	Assets      []Asset
+	Positions   []Position
+	CanDeposit  bool
+	CanTrade    bool
+	CanWithdraw bool
+	FeeTier     int
+	UpdateTime  int
+}

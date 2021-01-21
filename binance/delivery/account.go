@@ -34,15 +34,15 @@ func (api *RestApiClient) GetBalance(asset string) (*AccountBalance, error) {
 	return nil, fmt.Errorf("Not found asset %s", asset)
 }
 
-func (api *RestApiClient) AccountInformation() (interface{}, error) {
+func (api *RestApiClient) AccountInformation() (*AccountInformation, error) {
 	resp, err := api.queryPrivate("GET", "/account", url.Values{})
 	if err != nil {
 		return nil, err
 	}
-	var jsonData interface{}
+	var jsonData AccountInformation
 	err = json.Unmarshal(resp, &jsonData)
 	if err != nil {
 		return nil, fmt.Errorf("Could not execute request! (%s)", err.Error())
 	}
-	return jsonData, nil
+	return &jsonData, nil
 }
