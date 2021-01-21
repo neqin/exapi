@@ -16,27 +16,27 @@ const (
 	APIURL = "https://futures.kraken.com/derivatives"
 )
 
-type KrakenFutureRest struct {
+type RestApiClient struct {
 	key    string
 	secret string
 	client *http.Client
 }
 
-func NewKrakenFutureRest(key, secret string) *KrakenFutureRest {
-	return &KrakenFutureRest{
+func NewRestApi(key, secret string) *RestApiClient {
+	return &RestApiClient{
 		key:    key,
 		secret: secret,
 		client: http.DefaultClient,
 	}
 }
 
-func NewKrakenFutureRestWithClient(key, secret string, httpClient *http.Client) *KrakenFutureRest {
-	kraken := NewKrakenFutureRest(key, secret)
+func NewRestApiWithClient(key, secret string, httpClient *http.Client) *RestApiClient {
+	kraken := NewRestApi(key, secret)
 	kraken.client = httpClient
 	return kraken
 }
 
-func (api *KrakenFutureRest) Instruments() (interface{}, error) {
+func (api *RestApiClient) Instruments() (interface{}, error) {
 	resp, err := api.queryPublic("GET", "instruments", url.Values{
 		//"asset":  {asset},
 		//"key":    {key},
@@ -57,7 +57,7 @@ url.Values{
 	}
 */
 
-func (api *KrakenFutureRest) Accounts() (interface{}, error) {
+func (api *RestApiClient) Accounts() (interface{}, error) {
 	resp, err := api.queryPrivate("GET", "/api/v3/accounts", url.Values{})
 	if err != nil {
 		return nil, err
@@ -74,13 +74,13 @@ func (api *KrakenFutureRest) Accounts() (interface{}, error) {
 	return jsonData, nil
 }
 
-func (api *KrakenFutureRest) queryPublic(method string, endpoint string, values url.Values) ([]byte, error) {
+func (api *RestApiClient) queryPublic(method string, endpoint string, values url.Values) ([]byte, error) {
 	url := fmt.Sprintf("%s%s", APIURL, endpoint)
 	resp, err := api.request(method, url, values, nil)
 	return resp, err
 }
 
-func (api *KrakenFutureRest) queryPrivate(method string, endpoint string, values url.Values) ([]byte, error) {
+func (api *RestApiClient) queryPrivate(method string, endpoint string, values url.Values) ([]byte, error) {
 	url := fmt.Sprintf("%s%s", APIURL, endpoint)
 	secret, _ := base64.StdEncoding.DecodeString(api.secret)
 	nonce := time.Now().UnixNano()
@@ -95,7 +95,7 @@ func (api *KrakenFutureRest) queryPrivate(method string, endpoint string, values
 	return resp, err
 }
 
-func (api *KrakenFutureRest) request(method string, endpoint string, values url.Values, headers map[string]string) ([]byte, error) {
+func (api *RestApiClient) request(method string, endpoint string, values url.Values, headers map[string]string) ([]byte, error) {
 	req, err := http.NewRequest(method, endpoint, strings.NewReader(values.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("Could not execute request! (%s)", err.Error())
