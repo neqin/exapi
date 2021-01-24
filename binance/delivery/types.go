@@ -61,7 +61,17 @@ const (
 	timestampKey  = "timestamp"
 	signatureKey  = "signature"
 	recvWindowKey = "recvWindow"
+
+	IncomeTypeTransfer            IncomeType = "TRANSFER"
+	IncomeTypeWelcomeBonus        IncomeType = "WELCOME_BONUS"
+	IncomeTypeFuncdingFee         IncomeType = "FUNDING_FEE"
+	IncomeTypeRelizedPnl          IncomeType = "REALIZED_PNL"
+	IncomeTypeCommission          IncomeType = "COMMISSION"
+	IncomeTypeInsuranceClear      IncomeType = "INSURANCE_CLEAR"
+	IncomeTypeDeliveredSettelment IncomeType = "DELIVERED_SETTELMENT"
 )
+
+type IncomeType string
 
 type SideType string
 
@@ -146,4 +156,15 @@ type AccountInformation struct {
 	CanWithdraw bool
 	FeeTier     int
 	UpdateTime  int
+}
+
+type IncomeHistory struct {
+	Symbol     string
+	IncomeType IncomeType
+	Income     float64 `json:",string"`
+	Asset      string
+	Info       string
+	Time       int64
+	TranId     interface{}
+	TradeId    interface{}
 }
